@@ -42,6 +42,20 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("preofferanswer", (data) => {
+    console.log(`\n\tPre offer answer came\n\tData: ${JSON.stringify(data)}`);
+
+    const { callerSocketId, preOfferAnswer } = data;
+
+    const connectedPeer = connectedPeers.find(
+      (peer) => peer.uid == callerSocketId
+    );
+
+    if (connectedPeer) {
+      io.to(callerSocketId).emit("preofferanswer", data);
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log(`\n\tUser ${socket.id} disconnected`);
     const newConnectedPeers = connectedPeers.filter(
@@ -62,4 +76,7 @@ server.listen(PORT, () => {
 
 function logPeers() {
   console.log(`\n\tConnected Peers ${connectedPeers.length}`);
+  if (connectedPeers.length > 0) {
+    connectedPeers.forEach((p) => console.log(`\t\t${p.uid}`));
+  }
 }

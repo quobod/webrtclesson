@@ -1,14 +1,31 @@
 import * as wss from "./wss.js";
-import * as ui from "./ui.js";
 import * as constants from "./constants.js";
+import * as ui from "./ui.js";
+import * as store from "./store.js";
+
+let connectedUserDetails;
+let peerConection;
+let dataChannel;
 
 export const sendPreOffer = (callType, calleePersonalCode) => {
-  const data = {
+  connectedUserDetails = {
     callType,
     calleePersonalCode,
   };
 
-  wss.sendPreOffer(data);
+  if (
+    callType === constants.callType.CHAT_PERSONAL_CODE ||
+    callType == constants.callType.VIDEO_PERSONAL_CODE
+  ) {
+    const data = {
+      callType,
+      calleePersonalCode,
+    };
+
+    ui.showCallingDialog(callingDialogRejectCallHandler);
+
+    wss.sendPreOffer(data);
+  }
 };
 
 export const handlePreOffer = (data) => {
@@ -18,18 +35,59 @@ export const handlePreOffer = (data) => {
 
   const { callType, callerSocketId } = data;
 
+  connectedUserDetails = {
+    socketId: callerSocketId,
+    callType,
+  };
+
   if (
     callType === constants.callType.CHAT_PERSONAL_CODE ||
     callType === constants.callType.VIDEO_PERSONAL_CODE
   ) {
+    console.log(`\n\tShowing call dialog`);
     ui.showIncomingCallRequest(callType, acceptCallHandler, rejectCallHandler);
   }
 };
 
-const acceptCallHandler = () => {
-  console.log(`Call accepted`);
+export const handlePreOfferAnswer = (data) => {
+  console.log(`\n\tHandling pre offer answer\n\tData: ${JSON.stringify(data)}`);
+  const { preOfferAnswer } = data;
+
+  if (preOfferAnswer === constants.preOfferAnswer.CALLEE_NOT_FOUND) {
+    // show dialog callee not found
+  }
+
+  if (preOfferAnswer === constants.preOfferAnswer.CALL_UNAVAILABLE) {
+    // show dialog callee not able to connect
+  }
+
+  if (preOfferAnswer === constants.preOfferAnswer.CALL_REJECTED) {
+    // show dialog callee rejected call
+  }
+
+  if (preOfferAnswer === constants.preOfferAnswer.CALL_ACCEPTED) {
+    // send webRTC answer
+  }
 };
 
-const rejectCallHandler = () => {
+function acceptCallHandler() {
+  console.log(`Call accepted`);
+  sendPreOfferAnswer(constants.preOfferAnswer.CALL_ACCEPTED);
+}
+
+function rejectCallHandler() {
   console.log(`Call rejected`);
-};
+  sendPreOfferAnswer(constants.preOfferAnswer.CALL_REJECTED);
+}
+
+function sendPreOfferAnswer(preOfferAnswer) {
+  const data = {
+    callerSocketId: connectedUserDetails.socketId,
+    preOfferAnswer,
+  };
+  wss.sendPreOfferAnswer(data);
+}
+
+function callingDialogRejectCallHandler() {
+  console.log(`\n\tRejecting the call`);
+}

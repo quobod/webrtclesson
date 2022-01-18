@@ -1,25 +1,42 @@
-import * as store from './store.js';
-import * as ui from './ui.js';
-import * as webRTCHandler from './webrtchandler.js';
+import * as store from "./store.js";
+import * as ui from "./ui.js";
+import * as webRTCHandler from "./webrtchandler.js";
 
 let socketIO = null;
 
 export const registerSocketEvents = (socket) => {
-	socketIO = socket;
+  socketIO = socket;
 
-	socket.on('connect', () => {
-		console.log(`Successfully connected to socket.io server`);
-		store.setSocketId(socket.id);
-		ui.updatePersonalCode(socket.id);
-	});
+  socket.on("connect", () => {
+    console.log(`Successfully connected to socket.io server`);
+    store.setSocketId(socket.id);
+    ui.updatePersonalCode(socket.id);
+  });
 
-	socket.on('preoffer', (data) => {
-		console.log(`\n\tReceived a preoffer event from server\n\tData:\t${JSON.stringify(data)}`);
-		webRTCHandler.handlePreOffer(data);
-	});
+  socket.on("preoffer", (data) => {
+    console.log(
+      `\n\tReceived a preoffer event from server\n\tData:\t${JSON.stringify(
+        data
+      )}`
+    );
+    webRTCHandler.handlePreOffer(data);
+  });
+
+  socket.on("preofferanswer", (data) => {
+    console.log(
+      `\n\tPre offer answer received\n\tData: ${JSON.stringify(data)}`
+    );
+    webRTCHandler.handlePreOfferAnswer(data);
+  });
 };
 
 export const sendPreOffer = (data) => {
-	console.log(`\n\tEmitting to server preoofer event\n\tData:\t${JSON.stringify(data)}`);
-	socketIO.emit('preoffer', data);
+  console.log(
+    `\n\tEmitting to server preoofer event\n\tData:\t${JSON.stringify(data)}`
+  );
+  socketIO.emit("preoffer", data);
+};
+
+export const sendPreOfferAnswer = (data) => {
+  socketIO.emit("preofferanswer", data);
 };

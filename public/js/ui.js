@@ -26,3 +26,13 @@ export const showIncomingCallRequest = (
   utils.removeChildren(parentDialog);
   utils.appendChild(parentDialog, incomingCallDialog);
 };
+
+export const showCallingDialog = (rejectCallHandler) => {
+  const callingDialog = elements.showCallingDialog(rejectCallHandler);
+
+  // Remove all dialogs
+  const parentDialog = utils.getElement("dialog");
+  utils.removeChildren(parentDialog);
+  utils.appendChild(parentDialog, callingDialog);
+  utils.appendChild(parentDialog, callingDialog);
+};

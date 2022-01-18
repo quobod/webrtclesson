@@ -1,4 +1,4 @@
-import { appendChild, newElement } from "./utilities.js";
+import { appendChild, newElement, addHandler } from "./utilities.js";
 
 export const getIncomingCallDialog = (
   callTypeInfo,
@@ -34,13 +34,51 @@ export const getIncomingCallDialog = (
     acceptButton.innerHTML = "Accept Call";
     rejectButton.innerHTML = "Reject Call";
 
+    // register buttons click event
+    addHandler(acceptButton, "click", acceptCallHandler);
+    addHandler(rejectButton, "click", rejectCallHandler);
+
     appendChild(dialogButtonContainer, acceptButton);
     appendChild(dialogButtonContainer, rejectButton);
+    appendChild(dialogContent, title);
     appendChild(dialogContent, dialogButtonContainer);
-    appendChild(dialog, title);
     appendChild(dialog, dialogContent);
     // appendChild(dialogHtml, dialog);
     return dialog;
   }
   return null;
+};
+
+export const showCallingDialog = (rejectCallHandler) => {
+  const dialog = newElement("div");
+  const dialogContent = newElement("div");
+  const title = newElement("p");
+  const dialogButtonContainer = newElement("div");
+  const rejectButton = newElement("button");
+
+  if (
+    null != dialog &&
+    null != dialogContent &&
+    null != title &&
+    null != dialogButtonContainer &&
+    null != rejectButton
+  ) {
+    dialog.classList.add("dialog_wrapper");
+    dialogContent.classList.add("dialog_content");
+    title.classList.add("dialog_title");
+    dialogButtonContainer.classList.add("dialog_button_container");
+    rejectButton.classList.add(`dialog_reject_call_button`);
+
+    rejectButton.innerHTML = "Hangup Call";
+    title.innerHTML = "<h3>Calling</h3>";
+
+    // register buttons click event
+    addHandler(rejectButton, "click", rejectCallHandler);
+
+    appendChild(dialogButtonContainer, rejectButton);
+    appendChild(dialogContent, title);
+    appendChild(dialogContent, dialogButtonContainer);
+    appendChild(dialog, dialogContent);
+    return dialog;
+  }
 };

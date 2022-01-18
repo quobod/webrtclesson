@@ -18,8 +18,22 @@ export const appendChild = (parent, child) => {
   parent.appendChild(child);
 };
 
-export const addAttribute = (element, attribute, value) => {
-  element.addAttribute(attribute, value);
+export const append = (parent, child) => {
+  parent.append(child);
+};
+
+export const addAttribute = (theElement, whichAttribute, attributeValue) => {
+  if (null != theElement) {
+    theElement.setAttribute(whichAttribute, attributeValue);
+  }
+};
+
+export const removeAttribute = (theElement, whichAttribute) => {
+  if (null != theElement) {
+    if (theElement.hasAttribute(whichAttribute)) {
+      theElement.removeAttribute(whichAttribute);
+    }
+  }
 };
 
 export const removeChildren = (parent) => {
@@ -28,6 +42,27 @@ export const removeChildren = (parent) => {
   });
 };
 
-export const registerHandler = (element, whichEvent, handlerMethod) => {
-  element.addEventListener(whichEvent, handlerMethod);
+export const addHandler = (theElement, whichEvent, method) => {
+  if (null != theElement && null != whichEvent && typeof method == "function") {
+    theElement.addEventListener(whichEvent, method);
+  }
+};
+
+export const size = (arg = null) => {
+  if (null != arg) {
+    if (Array.isArray(arg)) {
+      return arg.length;
+    } else if (arg instanceof Object && !Array.isArray(arg)) {
+      return Object.keys(arg).length;
+    } else if (
+      !(arg instanceof Object) &&
+      !Array.isArray(arg) &&
+      typeof arg == "string"
+    ) {
+      return arg.length;
+    } else {
+      return NaN;
+    }
+  }
+  return NaN;
 };

@@ -11,6 +11,7 @@ wss.registerSocketEvents(socket);
 const personalCodeCopyButton = document.querySelector(
   "#personal_code_copy_button"
 );
+
 personalCodeCopyButton.addEventListener("click", () => {
   const personalCode = store.getState().socketId;
   navigator.clipboard && navigator.clipboard.writeText(personalCode);
@@ -20,6 +21,7 @@ personalCodeCopyButton.addEventListener("click", () => {
 const personalCodeChatButton = document.querySelector(
   "#personal_code_chat_button"
 );
+
 const personalCodeVideoButton = document.querySelector(
   "#personal_code_video_button"
 );

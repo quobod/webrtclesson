@@ -11,6 +11,7 @@
             <div class='logo_container'>
                 <img src='./utils/images/logo.png'></img>
             </div>
+
             <div>
                 <div class='description_container'>
                     <p class='description_container_paragraph'>
@@ -31,6 +32,7 @@
                     </div>
                 </div>
             </div>
+
             <div class='personal_code_connecting_container'>
                 <p class='personal_code_connecting_paragraph'>Personal Code</p>
                 <div class='personal_code_connecting_input_container'>
@@ -45,6 +47,7 @@
                     </button>
                 </div>
             </div>
+
             <div class='stranger_connecting_container'>
                 <p class='stranger_title_container'>Stranger</p>
                 <div class='stranger_buttons_container'>
@@ -56,14 +59,17 @@
                     </button>
                 </div>
             </div>
+
             <div class='checkbox_container'>
                 <div class='checkbox_connection' id='allow_strangers_checkbox'>
                     <img id='allow_strangers_checkbox_image' class='' src='./utils/images/check.png'></img>
                 </div>
                 <p class='checkbox_container_paragraph'>Allow connection from strangers</p>
             </div>
+
             <div class='dashboard_blur display_none' id='dashboard_blur'></div>
         </div>
+
         <div class='call_container'>
             <div class='videos_container'>
                 <div id='video_placeholder' class='videos_placeholder'>
@@ -108,6 +114,7 @@
                 </div>
             </div>
         </div>
+
         <div class='messenger_container'>
             <div class='messages_container' id='messages_container'></div>
             <div class='new_message_container display_none' id='new_message'>
@@ -119,7 +126,11 @@
             </div>
         </div>
     </div>
+
+    <div id="dialog"></div>
+
     <script src='/socket.io/socket.io.js'></script>
+    <script src='./js/elements.js' type='module'></script>
     <script src='./js/constants.js' type='module'></script>
     <script src='./js/ui.js' type='module'></script>
     <script src='./js/wss.js' type='module'></script>

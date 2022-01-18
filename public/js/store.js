@@ -1,3 +1,5 @@
+import { log, cls, parse, stringify, table } from "./utils.js";
+
 let state = {
   socketId: null,
   localStream: null,
@@ -13,7 +15,7 @@ export const setSocketId = (socketId) => {
     socketId,
   };
 
-  console.log(state);
+  log(`\n\t\tThe state has been updated ${stringify(state)}`);
 };
 
 export const setLocalStream = (stream) => {

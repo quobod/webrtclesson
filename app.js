@@ -18,13 +18,35 @@ let connectedPeers = [];
 
 io.on("connection", (socket) => {
   connectedPeers.push({ uid: socket.id });
+  console.log(`\n\tClient ${socket.id} connected`);
   logPeers();
 
+  socket.on("preoffer", (data) => {
+    const { calleePersonalCode, callType } = data;
+
+    console.log(
+      `\n\tPreoffer sent by ${socket.id}\n\tData:\t${JSON.stringify(data)}`
+    );
+
+    const connectedPeer = connectedPeers.find(
+      (x) => x.uid == calleePersonalCode
+    );
+
+    if (connectedPeer) {
+      const data = {
+        callerSocketId: socket.id,
+        callType,
+      };
+
+      io.to(calleePersonalCode).emit("preoffer", data);
+    }
+  });
+
   socket.on("disconnect", () => {
-    console.log(`User disconnected`);
-    const newConnectedPeers = connectedPeers.filter((peer) => {
-      peer.uid !== socket.id;
-    });
+    console.log(`\n\tUser ${socket.id} disconnected`);
+    const newConnectedPeers = connectedPeers.filter(
+      (peer) => peer.uid !== socket.id
+    );
 
     connectedPeers = newConnectedPeers;
     logPeers();
@@ -34,9 +56,10 @@ io.on("connection", (socket) => {
 // require("./custom_modules/IOHandler")(io);
 
 server.listen(PORT, () => {
+  console.clear();
   console.log(`\n\tListening on port ${PORT}\n`);
 });
 
 function logPeers() {
-  console.log(`\tConnected Peers ${connectedPeers.length}`);
+  console.log(`\n\tConnected Peers ${connectedPeers.length}`);
 }

@@ -1,3 +1,4 @@
+import { preOfferAnswer } from "./constants.js";
 import { appendChild, newElement, addHandler } from "./utilities.js";
 
 export const getIncomingCallDialog = (
@@ -43,7 +44,7 @@ export const getIncomingCallDialog = (
     appendChild(dialogContent, title);
     appendChild(dialogContent, dialogButtonContainer);
     appendChild(dialog, dialogContent);
-    // appendChild(dialogHtml, dialog);
+
     return dialog;
   }
   return null;
@@ -79,6 +80,33 @@ export const showCallingDialog = (rejectCallHandler) => {
     appendChild(dialogContent, title);
     appendChild(dialogContent, dialogButtonContainer);
     appendChild(dialog, dialogContent);
+    return dialog;
+  }
+};
+
+export const getInfoDialog = (dialogTitle, dialogDescription) => {
+  const dialog = newElement("div");
+  const dialogContent = newElement("div");
+  const title = newElement("p");
+  const description = newElement("p");
+
+  if (
+    null != dialog &&
+    null != dialogContent &&
+    null != title &&
+    null != description
+  ) {
+    dialog.classList.add("dialog_wrapper");
+    dialogContent.classList.add("dialog_content");
+    title.classList.add("dialog_title");
+
+    title.innerHTML = `<h3>${dialogTitle}</h3>`;
+    description.innerHTML = `<h3>${dialogDescription}</h3>`;
+
+    appendChild(dialog, dialogContent);
+    appendChild(dialogContent, title);
+    appendChild(dialogContent, description);
+
     return dialog;
   }
 };

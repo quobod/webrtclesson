@@ -99,6 +99,7 @@ export const getInfoDialog = (dialogTitle, dialogDescription) => {
     dialog.classList.add("dialog_wrapper");
     dialogContent.classList.add("dialog_content");
     title.classList.add("dialog_title");
+    description.classList.add("dialog_description");
 
     title.innerHTML = `<h3>${dialogTitle}</h3>`;
     description.innerHTML = `<h3>${dialogDescription}</h3>`;
